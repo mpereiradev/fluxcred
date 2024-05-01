@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  app:
+    container_name: fluxcred_app
+    restart: unless-stopped
+    image: srmasset/fluxcred-app
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/fluxcred
+      SPRING_DATASOURCE_USERNAME: srmasset
+      SPRING_DATASOURCE_PASSWORD: Admin!
+    depends_on:
+      - db
+    networks:
+      - fluxcred_network
+
+  db:
+    container_name: fluxcred_db
+    restart: unless-stopped
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: fluxcred
+      POSTGRES_USER: srmasset
+      POSTGRES_PASSWORD: Admin!
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgresql/:/var/lib/postgresql/data
+    networks:
+      - fluxcred_network
+
+networks:
+  fluxcred_network:
+    driver: bridge
