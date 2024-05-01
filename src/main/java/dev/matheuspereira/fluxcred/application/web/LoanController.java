@@ -3,15 +3,19 @@ package dev.matheuspereira.fluxcred.application.web;
 import dev.matheuspereira.fluxcred.application.data.request.LoanRequest;
 import dev.matheuspereira.fluxcred.application.data.response.LoanResponse;
 import dev.matheuspereira.fluxcred.domain.model.Loan;
+import dev.matheuspereira.fluxcred.domain.model.UserRole;
 import dev.matheuspereira.fluxcred.domain.ports.driver.ILoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.management.relation.Role;
 
 @RestController
 @RequestMapping("/loans")
@@ -44,6 +48,7 @@ public class LoanController {
     return ResponseEntity.ok(response);
   }
 
+  @RolesAllowed("ADMIN")
   @PatchMapping("/{id}")
   @Operation(summary = "Update a loan")
   public ResponseEntity<LoanResponse> updateLoan(
@@ -54,6 +59,7 @@ public class LoanController {
     return ResponseEntity.ok(response);
   }
 
+  @RolesAllowed("ADMIN")
   @DeleteMapping("/{id}")
   @Operation(summary = "Cancel a loan")
   public ResponseEntity<LoanResponse> cancelLoan(@PathVariable Integer id) {

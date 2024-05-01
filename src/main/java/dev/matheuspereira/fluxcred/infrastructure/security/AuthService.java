@@ -4,6 +4,7 @@ import dev.matheuspereira.fluxcred.application.data.response.JwtResponse;
 import dev.matheuspereira.fluxcred.domain.exception.BusinessException;
 import dev.matheuspereira.fluxcred.domain.model.AuthCredentials;
 import dev.matheuspereira.fluxcred.domain.model.User;
+import dev.matheuspereira.fluxcred.domain.model.UserRole;
 import dev.matheuspereira.fluxcred.domain.ports.driven.IAuthService;
 import dev.matheuspereira.fluxcred.domain.ports.driven.IUserRepository;
 import dev.matheuspereira.fluxcred.infrastructure.entity.UserEntity;
@@ -32,6 +33,8 @@ public class AuthService implements IAuthService {
   public User register(User user) {
     try {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
+      user.setRole(UserRole.USER);
+
       var entity = userRepository.save(user);
       return modelMapper.map(entity, User.class);
     } catch (Exception e) {

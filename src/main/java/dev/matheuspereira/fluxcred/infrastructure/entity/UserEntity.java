@@ -1,7 +1,10 @@
 package dev.matheuspereira.fluxcred.infrastructure.entity;
 
+import dev.matheuspereira.fluxcred.domain.model.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +16,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -40,6 +44,10 @@ public class UserEntity implements UserDetails {
   @Column(nullable = false)
   private String password;
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private UserRole role;
+
   @CreationTimestamp
   @Column(updatable = false, name = "created_at")
   private LocalDateTime createdAt;
@@ -50,7 +58,7 @@ public class UserEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of();
+    return List.of(new SimpleGrantedAuthority(role.name()));
   }
 
   @Override

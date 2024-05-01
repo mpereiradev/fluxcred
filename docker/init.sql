@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -41,6 +42,14 @@ CREATE TABLE IF NOT EXISTS loans (
 );
 
 -- Create loansConfig tables
+CREATE TABLE IF NOT EXISTS loan_installment (
+    id SERIAL PRIMARY KEY,
+    identifier_type VARCHAR(2) NOT NULL UNIQUE,
+    min_monthly_payment DECIMAL(10, 2) NOT NULL,
+    max_loan_amount DECIMAL(10, 2) NOT NULL
+);
+
+-- Create loansConfig tables
 CREATE TABLE IF NOT EXISTS loan_config (
     id SERIAL PRIMARY KEY,
     identifier_type VARCHAR(2) NOT NULL UNIQUE,
@@ -49,14 +58,17 @@ CREATE TABLE IF NOT EXISTS loan_config (
 );
 
 -- Insert in users table
-INSERT INTO users (full_name, email, password) VALUES
-('João Silva', 'joao.silva@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe'),
-('Maria Oliveira', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe');
+INSERT INTO users (full_name, email, password, role) VALUES
+('Matheus C Pereira', 'matheus@srmasset.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'ADMIN'),
+('Ana Santos', 'joao.silva@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER'),
+('Auto Mais', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
+('José Augusto Aluno', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
+('Carlos Eduardo Aposentado', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
 
 -- Insert in people table
 INSERT INTO people (name, identifier, birth_date, identifier_type, min_monthly_payment, max_loan_amount) VALUES
 ('Ana Santos', '12345678901', '1990-01-15', 'PF', 300.00, 10000.00), -- PF
-('Empresa XYZ', '12345678901234', '2000-05-25', 'PJ', 1000.00, 100000.00), -- PJ
+('Auto Mais', '12345678901234', '2000-05-25', 'PJ', 1000.00, 100000.00), -- PJ
 ('José Augusto Aluno', '12345678', '1998-08-30', 'EU', 100.00, 10000.00), -- EU
 ('Carlos Eduardo Aposentado', '1234567890', '1954-12-09', 'AP', 400.00, 25000.00); -- AP
 
