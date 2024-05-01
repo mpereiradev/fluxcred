@@ -34,3 +34,4 @@ build/
 
 ### PostgreSQL
 docker/postgresql
+docker/rabbitmq
