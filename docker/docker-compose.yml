@@ -17,6 +17,8 @@ services:
       - db
     networks:
       - fluxcred_network
+    labels:
+      NAME: "fluxcred"
 
   db:
     container_name: fluxcred_db
@@ -33,6 +35,24 @@ services:
       - ./postgresql/:/var/lib/postgresql/data
     networks:
       - fluxcred_network
+    labels:
+      NAME: "fluxcred"
+
+  rabbitmq:
+    container_name: fluxcred_rabbit
+    restart: unless-stopped
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: "srmasset"
+      RABBITMQ_DEFAULT_PASS: "Admin!"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    labels:
+      NAME: "fluxcred"
 
 networks:
   fluxcred_network:

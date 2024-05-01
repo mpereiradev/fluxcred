@@ -46,16 +46,25 @@ public class PersonService implements IPersonService {
   }
 
   @Override
-  public Person update(Integer id, Person personPatch) {
-    var person = personRepository.findById(id)
-        .orElseThrow(() -> new BusinessException("The person not exists", 404));
+  public Person getByIdentifier(String identifier) {
+    return personRepository.findByIdentifier(identifier).orElseThrow(NotFoundException::new);
+  }
 
-    personRepository.findByIdentifier(personPatch.getIdentifier())
-        .ifPresent(p -> {
-          if (!p.getIdentifier().equalsIgnoreCase(personPatch.getIdentifier())) {
-            throw new BusinessException("The identifier already exists", 422);
-          }
-        });
+  @Override
+  public Person update(Integer id, Person personPatch) {
+    var person =
+        personRepository
+            .findById(id)
+            .orElseThrow(() -> new BusinessException("The person not exists", 404));
+
+    personRepository
+        .findByIdentifier(personPatch.getIdentifier())
+        .ifPresent(
+            p -> {
+              if (!p.getIdentifier().equalsIgnoreCase(personPatch.getIdentifier())) {
+                throw new BusinessException("The identifier already exists", 422);
+              }
+            });
 
     applyPatchToPerson(personPatch, person);
     try {
@@ -64,6 +73,11 @@ public class PersonService implements IPersonService {
       log.error("Person not saved", e);
       throw new BusinessException("Could not save the person, there was an internal error", 500);
     }
+  }
+
+  @Override
+  public Person save(Person person) {
+    return personRepository.save(person);
   }
 
   @Override

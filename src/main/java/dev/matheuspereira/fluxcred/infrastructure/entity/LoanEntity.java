@@ -2,13 +2,13 @@ package dev.matheuspereira.fluxcred.infrastructure.entity;
 
 import dev.matheuspereira.fluxcred.domain.model.LoanStatus;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,8 +21,8 @@ public class LoanEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(nullable = false)
-  private Integer personId;  // Chave estrangeira para a entidade Person
+  @Column(nullable = false, name = "person_identifier")
+  private String personIdentifier;
 
   @Column(nullable = false)
   private double amount;
@@ -62,8 +62,4 @@ public class LoanEntity {
   @UpdateTimestamp
   @Column(nullable = false)
   private LocalDateTime updatedAt;
-
-  @ManyToOne
-  @JoinColumn(name = "person_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private PersonEntity person;
 }

@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS people (
 -- Create loans tables
 CREATE TABLE IF NOT EXISTS loans (
     id SERIAL PRIMARY KEY,
-    person_id INTEGER NOT NULL,
+    person_identifier VARCHAR(255) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     number_of_installments INTEGER NOT NULL,
     status VARCHAR(255) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS loans (
     cancellation_date TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (person_id) REFERENCES people(id) ON DELETE CASCADE
+    FOREIGN KEY (person_identifier) REFERENCES people(identifier) ON DELETE CASCADE
 );
 
 -- Create loansConfig tables
@@ -59,13 +59,6 @@ INSERT INTO people (name, identifier, birth_date, identifier_type, min_monthly_p
 ('Empresa XYZ', '12345678901234', '2000-05-25', 'PJ', 1000.00, 100000.00), -- PJ
 ('José Augusto Aluno', '12345678', '1998-08-30', 'EU', 100.00, 10000.00), -- EU
 ('Carlos Eduardo Aposentado', '1234567890', '1954-12-09', 'AP', 400.00, 25000.00); -- AP
-
--- Insert in loans table
-INSERT INTO loans (person_id, loan_amount, number_of_installments, status) VALUES
-((SELECT id FROM people WHERE identifier = '12345678901'), 5000.00, 12, 'STARTED'),
-((SELECT id FROM people WHERE identifier = '12345678901234'), 75000.00, 24, 'DISAPPROVED'),
-((SELECT id FROM people WHERE identifier = '12345678'), 2000.00, 10, 'STARTED'),
-((SELECT id FROM people WHERE identifier = '1234567890'), 15000.00, 20, 'APPROVED');
 
 -- Insert in loans_config table
 INSERT INTO loan_config (identifier_type, min_monthly_payment, max_loan_amount) VALUES

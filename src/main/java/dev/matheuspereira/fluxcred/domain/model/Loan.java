@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Loan {
-  private Integer personId;
+  private Integer id;
+  private String personIdentifier;
   private double amount;
   private int numberOfInstallments;
   private LoanStatus status;
