@@ -61,7 +61,7 @@ public class PersonService implements IPersonService {
         .findByIdentifier(personPatch.getIdentifier())
         .ifPresent(
             p -> {
-              if (!p.getIdentifier().equalsIgnoreCase(personPatch.getIdentifier())) {
+              if (p.getIdentifier().equalsIgnoreCase(personPatch.getIdentifier())) {
                 throw new BusinessException("The identifier already exists", 422);
               }
             });
