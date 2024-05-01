@@ -7,6 +7,7 @@ import dev.matheuspereira.fluxcred.domain.model.Person;
 import dev.matheuspereira.fluxcred.domain.ports.driven.IPersonRepository;
 import dev.matheuspereira.fluxcred.domain.ports.driver.ILoanConfigService;
 import dev.matheuspereira.fluxcred.domain.ports.driver.IPersonService;
+import dev.matheuspereira.fluxcred.domain.validator.IdentifierValidator;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,9 @@ public class PersonService implements IPersonService {
         });
 
     person.setIdentifierType(IdentifierType.fromLength(person.getIdentifier().length()));
+    if (!IdentifierValidator.validate(person.getIdentifier(), person.getIdentifierType())) {
+      throw new BusinessException("The identifier is invalid for type: " + person.getIdentifierType(), 412);
+    }
 
     var loanConfig = loanConfigService.getByIdentifierType(person.getIdentifierType().name());
     person.setMinMonthlyPayment(loanConfig.getMinMonthlyPayment());

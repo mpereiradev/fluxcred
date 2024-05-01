@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,6 +55,20 @@ class PersonServiceTest {
 
     assertNotNull(savedPerson);
     verify(personRepository).save(person);
+  }
+
+  @Test
+  void createPersonWithInvalidCPFShouldThrowBusinessException() {
+    Person person = new Person();
+    person.setIdentifier("11111111111");
+
+    BusinessException thrown = assertThrows(
+        BusinessException.class,
+        () -> personService.create(person),
+        "Expected create() to throw, but it did not"
+    );
+
+    assertTrue(thrown.getMessage().contains("The identifier is invalid for type"));
   }
 
   @Test
