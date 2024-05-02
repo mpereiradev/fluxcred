@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class LoanConfig {
   private Integer id;
   private IdentifierType identifierType;
-  private double minMonthlyPayment;
-  private double maxLoanAmount;
+  private BigDecimal minMonthlyPayment;
+  private BigDecimal maxLoanAmount;
 }

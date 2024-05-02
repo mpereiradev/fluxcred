@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS loans (
     amount DECIMAL(10, 2) NOT NULL,
     number_of_installments INTEGER NOT NULL,
     status VARCHAR(255) NOT NULL,
-    first_payment_date TIMESTAMP,
+    first_payment_date DATE,
     approval_date TIMESTAMP,
     signing_date TIMESTAMP,
     delinquency_date TIMESTAMP,
@@ -42,11 +42,16 @@ CREATE TABLE IF NOT EXISTS loans (
 );
 
 -- Create loansConfig tables
-CREATE TABLE IF NOT EXISTS loan_installment (
+CREATE TABLE IF NOT EXISTS loan_installments (
     id SERIAL PRIMARY KEY,
-    identifier_type VARCHAR(2) NOT NULL UNIQUE,
-    min_monthly_payment DECIMAL(10, 2) NOT NULL,
-    max_loan_amount DECIMAL(10, 2) NOT NULL
+    loan_id INTEGER NOT NULL,
+    installment_number INTEGER NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    due_date DATE NOT NULL,
+    payment_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (loan_id) REFERENCES loans(id) ON DELETE CASCADE
 );
 
 -- Create loansConfig tables

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -69,11 +71,11 @@ public class LoanConfigService implements ILoanConfigService {
   }
 
   private void applyPatchToModel(LoanConfig loanConfigPatch, LoanConfig loanConfig) {
-    if (loanConfigPatch.getMinMonthlyPayment() > 0) {
+    if (loanConfigPatch.getMinMonthlyPayment().compareTo(BigDecimal.ZERO) > 0) {
       loanConfig.setMinMonthlyPayment(loanConfigPatch.getMinMonthlyPayment());
     }
 
-    if (loanConfigPatch.getMaxLoanAmount() > 0) {
+    if (loanConfigPatch.getMaxLoanAmount().compareTo(BigDecimal.ZERO) > 0) {
       loanConfig.setMaxLoanAmount(loanConfigPatch.getMaxLoanAmount());
     }
   }

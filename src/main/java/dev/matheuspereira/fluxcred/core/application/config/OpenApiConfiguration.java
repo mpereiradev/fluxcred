@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-    info = @Info(title = "FluxCred API", version = "v1"),
+    info = @Info(title = "FluxCred Core API", version = "v1"),
     security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(

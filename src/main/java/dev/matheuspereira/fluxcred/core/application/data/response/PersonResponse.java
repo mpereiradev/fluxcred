@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -30,10 +31,10 @@ public class PersonResponse {
   private LocalDate birthDate;
 
   @Schema(description = "The minimum monthly payment value", example = "300.00")
-  private double minMonthlyPayment;
+  private BigDecimal minMonthlyPayment;
 
   @Schema(description = "The maximum loan amount", example = "10000.00")
-  private double maxLoanAmount;
+  private BigDecimal maxLoanAmount;
 
   @Schema(description = "The timestamp when the person was created", example = "2024-01-01T12:00:00", type = "string", format = "date-time")
   private LocalDateTime createdAt;

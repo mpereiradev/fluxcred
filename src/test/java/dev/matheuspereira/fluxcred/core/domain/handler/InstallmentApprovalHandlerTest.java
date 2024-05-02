@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+
 @ExtendWith(MockitoExtension.class)
 class InstallmentApprovalHandlerTest {
 
@@ -30,10 +32,10 @@ class InstallmentApprovalHandlerTest {
   @Test
   void shouldApproveLoanWhenConditionsAreMet() {
     Loan loan = new Loan();
-    loan.setAmount(5000);
+    loan.setAmount(BigDecimal.valueOf(5000));
     loan.setNumberOfInstallments(20);
     Person person = new Person();
-    person.setMinMonthlyPayment(200);
+    person.setMinMonthlyPayment(BigDecimal.valueOf(200));
 
     handler.handle(loan, person);
 
@@ -44,10 +46,10 @@ class InstallmentApprovalHandlerTest {
   @Test
   void shouldDisapproveLoanWhenInstallmentValueTooLow() {
     Loan loan = new Loan();
-    loan.setAmount(1000);
+    loan.setAmount(BigDecimal.valueOf(1000));
     loan.setNumberOfInstallments(12); // Less than 24 but installment value will be too low
     Person person = new Person();
-    person.setMinMonthlyPayment(100);
+    person.setMinMonthlyPayment(BigDecimal.valueOf(100));
 
     BusinessException exception =
         assertThrows(BusinessException.class, () -> handler.handle(loan, person));
@@ -62,10 +64,10 @@ class InstallmentApprovalHandlerTest {
   @Test
   void shouldDisapproveLoanWhenNumberOfInstallmentsTooHigh() {
     Loan loan = new Loan();
-    loan.setAmount(5000);
+    loan.setAmount(BigDecimal.valueOf(5000));
     loan.setNumberOfInstallments(30); // Greater than 24
     Person person = new Person();
-    person.setMinMonthlyPayment(200);
+    person.setMinMonthlyPayment(BigDecimal.valueOf(200));
 
     BusinessException exception =
         assertThrows(BusinessException.class, () -> handler.handle(loan, person));

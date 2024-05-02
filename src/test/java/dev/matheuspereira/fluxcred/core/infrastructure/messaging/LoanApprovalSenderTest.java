@@ -1,5 +1,6 @@
 package dev.matheuspereira.fluxcred.core.infrastructure.messaging;
 
+import dev.matheuspereira.fluxcred.core.domain.model.Loan;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +22,7 @@ class LoanApprovalSenderTest {
 
   @Test
   void testSendLoanApprovedMessage() {
-    String testMessage = "Test loan approval message";
+    var testMessage = new Loan();
     String testExchange = "test.exchange";
     String testRoutingKey = "test.routingKey";
 

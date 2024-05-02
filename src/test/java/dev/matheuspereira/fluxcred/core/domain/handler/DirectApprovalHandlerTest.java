@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+
 @ExtendWith(MockitoExtension.class)
 class DirectApprovalHandlerTest {
 
@@ -23,24 +25,24 @@ class DirectApprovalHandlerTest {
   @Test
   void shouldApproveLoanWhenAmountIsWithinLimit() {
     Loan loan = new Loan();
-    loan.setAmount(5000);
+    loan.setAmount(BigDecimal.valueOf(5000));
     Person person = new Person();
-    person.setMaxLoanAmount(10000);
+    person.setMaxLoanAmount(BigDecimal.valueOf(10000));
 
     handler.handle(loan, person);
 
     assertEquals(LoanStatus.APPROVED, loan.getStatus());
     assertNotNull(loan.getApprovalDate());
-    assertEquals(5000, person.getMaxLoanAmount());
+    assertEquals(0, BigDecimal.valueOf(5000).compareTo(person.getMaxLoanAmount()));
     verifyNoInteractions(nextHandler);
   }
 
   @Test
   void shouldPassToNextHandlerWhenAmountExceedsLimit() {
     Loan loan = new Loan();
-    loan.setAmount(11000);
+    loan.setAmount(BigDecimal.valueOf(11000));
     Person person = new Person();
-    person.setMaxLoanAmount(10000);
+    person.setMaxLoanAmount(BigDecimal.valueOf(10000));
 
     handler.handle(loan, person);
 
@@ -53,9 +55,9 @@ class DirectApprovalHandlerTest {
     LoanApprovalHandler newNextHandler = Mockito.mock(LoanApprovalHandler.class);
     handler.setNext(newNextHandler);
     Loan loan = new Loan();
-    loan.setAmount(12000);
+    loan.setAmount(BigDecimal.valueOf(12000));
     Person person = new Person();
-    person.setMaxLoanAmount(10000);
+    person.setMaxLoanAmount(BigDecimal.valueOf(10000));
 
     handler.handle(loan, person);
 

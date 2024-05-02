@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+
 @ExtendWith(MockitoExtension.class)
 class ManualApprovalHandlerTest {
 
@@ -18,27 +20,27 @@ class ManualApprovalHandlerTest {
   @Test
   void shouldAwaitApprovalWhenAmountIsWithinTenPercentAboveLimit() {
     Loan loan = new Loan();
-    loan.setAmount(11000);
+    loan.setAmount(BigDecimal.valueOf(11000));
     Person person = new Person();
-    person.setMaxLoanAmount(10000);
+    person.setMaxLoanAmount(BigDecimal.valueOf(10000));
 
     handler.handle(loan, person);
 
     assertEquals(LoanStatus.AWAITING_APPROVAL, loan.getStatus());
-    assertEquals(-1000, person.getMaxLoanAmount());
+    assertEquals(0, BigDecimal.valueOf(-1000).compareTo(person.getMaxLoanAmount()));
   }
 
   @Test
   void shouldDisapproveWhenAmountExceedsTenPercentAboveLimit() {
     Loan loan = new Loan();
-    loan.setAmount(15000);
+    loan.setAmount(BigDecimal.valueOf(15000));
     Person person = new Person();
-    person.setMaxLoanAmount(10000);
+    person.setMaxLoanAmount(BigDecimal.valueOf(10000));
 
     handler.handle(loan, person);
 
     assertEquals(LoanStatus.DISAPPROVED, loan.getStatus());
     assertNotNull(loan.getApprovalDate());
-    assertEquals(10000, person.getMaxLoanAmount());
+    assertEquals(0, BigDecimal.valueOf(10000).compareTo(person.getMaxLoanAmount()));
   }
 }

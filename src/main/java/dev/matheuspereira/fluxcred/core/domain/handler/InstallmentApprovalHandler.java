@@ -1,10 +1,12 @@
 package dev.matheuspereira.fluxcred.core.domain.handler;
 
 import dev.matheuspereira.fluxcred.core.domain.exception.BusinessException;
+import dev.matheuspereira.fluxcred.core.domain.model.Loan;
 import dev.matheuspereira.fluxcred.core.domain.model.LoanStatus;
 import dev.matheuspereira.fluxcred.core.domain.model.Person;
-import dev.matheuspereira.fluxcred.core.domain.model.Loan;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 public class InstallmentApprovalHandler implements LoanApprovalHandler {
@@ -17,9 +19,10 @@ public class InstallmentApprovalHandler implements LoanApprovalHandler {
 
   @Override
   public void handle(Loan loan, Person person) {
-    double installmentValue = loan.getAmount() / loan.getNumberOfInstallments();
+    BigDecimal installmentValue = loan.getAmount()
+        .divide(new BigDecimal(loan.getNumberOfInstallments()), 2, RoundingMode.HALF_UP);
 
-    if (installmentValue < person.getMinMonthlyPayment() || loan.getNumberOfInstallments() > 24) {
+    if (installmentValue.compareTo(person.getMinMonthlyPayment()) < 0 || loan.getNumberOfInstallments() > 24) {
       loan.setStatus(LoanStatus.DISAPPROVED);
       loan.setApprovalDate(LocalDateTime.now());
       throw new BusinessException(

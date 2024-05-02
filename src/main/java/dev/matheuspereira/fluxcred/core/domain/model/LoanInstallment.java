@@ -13,19 +13,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Loan {
+public class LoanInstallment {
   private Integer id;
-  private String personIdentifier;
+  private Loan loan;
+  private int installmentNumber;
   private BigDecimal amount;
-  private int numberOfInstallments;
-  private LoanStatus status;
-  private LocalDate firstPaymentDate;
-  private LocalDateTime approvalDate;
-  private LocalDateTime signingDate;
-  private LocalDateTime delinquencyDate;
-  private LocalDateTime nextPaymentDate;
-  private LocalDateTime completionDate;
-  private LocalDateTime cancellationDate;
+  private LocalDate dueDate;
+  private LocalDateTime paymentDate;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 }

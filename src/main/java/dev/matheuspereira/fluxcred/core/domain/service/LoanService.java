@@ -2,20 +2,24 @@ package dev.matheuspereira.fluxcred.core.domain.service;
 
 import dev.matheuspereira.fluxcred.core.domain.exception.BusinessException;
 import dev.matheuspereira.fluxcred.core.domain.exception.NotFoundException;
+import dev.matheuspereira.fluxcred.core.domain.handler.InstallmentApprovalHandler;
 import dev.matheuspereira.fluxcred.core.domain.handler.LoanApprovalHandler;
+import dev.matheuspereira.fluxcred.core.domain.model.Loan;
 import dev.matheuspereira.fluxcred.core.domain.model.LoanStatus;
 import dev.matheuspereira.fluxcred.core.domain.model.Person;
-import dev.matheuspereira.fluxcred.core.domain.ports.driven.ILoanRepository;
-import dev.matheuspereira.fluxcred.core.domain.ports.driver.IPersonService;
-import dev.matheuspereira.fluxcred.core.domain.handler.InstallmentApprovalHandler;
-import dev.matheuspereira.fluxcred.core.domain.model.Loan;
 import dev.matheuspereira.fluxcred.core.domain.ports.driven.ILoanApprovalSender;
+import dev.matheuspereira.fluxcred.core.domain.ports.driven.ILoanRepository;
 import dev.matheuspereira.fluxcred.core.domain.ports.driver.ILoanService;
-
-import java.time.LocalDateTime;
+import dev.matheuspereira.fluxcred.core.domain.ports.driver.IPersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static java.util.Objects.isNull;
 
 @Slf4j
 @Service
@@ -31,11 +35,20 @@ public class LoanService implements ILoanService {
 
     LoanApprovalHandler approvalHandler = new InstallmentApprovalHandler();
     approvalHandler.handle(loan, person);
-    loanApprovalSender.sendLoanApprovedMessage(loan.toString());
 
     try {
       personService.save(person);
-      return loanRepository.save(loan);
+      if (isNull(loan.getFirstPaymentDate())) {
+        loan.setFirstPaymentDate(LocalDate.now().plusDays(30));
+      }
+
+      loan = loanRepository.save(loan);
+
+      if (loan.getStatus() == LoanStatus.APPROVED) {
+        loanApprovalSender.sendLoanApprovedMessage(loan);
+      }
+
+      return loan;
     } catch (Exception e) {
       log.error("Loan not saved", e);
       throw new BusinessException("Could not save the loan, there was an internal error", 500);
@@ -93,8 +106,13 @@ public class LoanService implements ILoanService {
     return loanRepository.save(loan);
   }
 
+  @Override
+  public Loan save(Loan loan) {
+    return loanRepository.save(loan);
+  }
+
   private void applyPatchToModel(Loan loanPatch, Loan loan) {
-    if (loanPatch.getAmount() > 0) {
+    if (loanPatch.getAmount().compareTo(BigDecimal.ZERO) > 0) {
       loan.setAmount(loanPatch.getAmount());
     }
 

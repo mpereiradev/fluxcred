@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,7 +53,7 @@ class LoanServiceTest {
 
     verify(personService).save(person);
     verify(loanRepository).save(loan);
-    verify(loanApprovalSender).sendLoanApprovedMessage(loan.toString());
+    verify(loanApprovalSender).sendLoanApprovedMessage(loan);
   }
 
   @Test
@@ -87,13 +88,13 @@ class LoanServiceTest {
     Loan existingLoan = new Loan();
     existingLoan.setStatus(LoanStatus.STARTED);
     Loan loanPatch = new Loan();
-    loanPatch.setAmount(1000);
+    loanPatch.setAmount(BigDecimal.valueOf(1000));
     when(loanRepository.findById(anyInt())).thenReturn(Optional.of(existingLoan));
     when(loanRepository.save(any(Loan.class))).thenReturn(existingLoan);
 
     Loan updatedLoan = loanService.update(1, loanPatch);
 
-    assertEquals(1000, updatedLoan.getAmount());
+    assertEquals(0, BigDecimal.valueOf(1000).compareTo(updatedLoan.getAmount()));
   }
 
   @Test

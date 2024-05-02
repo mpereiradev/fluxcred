@@ -1,9 +1,9 @@
 version: '3.8'
 services:
-  app:
-    container_name: fluxcred_app
+  core:
+    container_name: fluxcred_core_api
     restart: unless-stopped
-    image: srmasset/fluxcred-app
+    image: srmasset/fluxcred-core-api
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -56,4 +56,4 @@ services:
 
 networks:
   fluxcred_network:
-    driver: bridge
+    external: true
