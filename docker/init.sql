@@ -67,8 +67,8 @@ INSERT INTO users (full_name, email, password, role) VALUES
 ('Matheus C Pereira', 'matheus@srmasset.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'ADMIN'),
 ('Ana Santos', 'joao.silva@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER'),
 ('Auto Mais', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
-('José Augusto Aluno', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
-('Carlos Eduardo Aposentado', 'maria.oliveira@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
+('José Augusto Aluno', 'jose.augusto@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
+('Carlos Eduardo Aposentado', 'carlos.eduardo@example.com', '$2a$10$xBjjsg8JtPK9kQH2MLyvcO8GlGixXkKJ1LcGFCrg40RNpSm/MqrGe', 'USER');
 
 -- Insert in people table
 INSERT INTO people (name, identifier, birth_date, identifier_type, min_monthly_payment, max_loan_amount) VALUES
