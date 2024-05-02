@@ -72,7 +72,7 @@ class LoanConfigControllerTest {
     when(loanConfigService.getByIdentifierType(any())).thenReturn(loanConfig);
     when(modelMapper.map(loanConfig, LoanConfigResponse.class)).thenReturn(response);
 
-    mockMvc.perform(get("/loan-configs/{identifierType}", "PERSONAL"))
+    mockMvc.perform(get("/loan-configs/{identifierType}", "PF"))
         .andExpect(status().isOk());
   }
 
