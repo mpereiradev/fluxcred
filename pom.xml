@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.matheuspereira</groupId>
-    <artifactId>fluxcred</artifactId>
+    <artifactId>fluxcred-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>FluxCred</name>
+    <name>FluxCred Core API</name>
     <description>API para fluxo do processamento de empréstimo para Empresa X</description>
     <properties>
         <java.version>17</java.version>
