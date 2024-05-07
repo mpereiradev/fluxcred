@@ -1,13 +1,12 @@
 package dev.matheuspereira.fluxcred.core.domain.service;
 
-import dev.matheuspereira.fluxcred.core.domain.ports.driven.IPersonRepository;
 import dev.matheuspereira.fluxcred.core.domain.exception.BusinessException;
 import dev.matheuspereira.fluxcred.core.domain.exception.NotFoundException;
 import dev.matheuspereira.fluxcred.core.domain.model.IdentifierType;
 import dev.matheuspereira.fluxcred.core.domain.model.Person;
+import dev.matheuspereira.fluxcred.core.domain.ports.driven.IPersonRepository;
 import dev.matheuspereira.fluxcred.core.domain.ports.driver.ILoanConfigService;
 import dev.matheuspereira.fluxcred.core.domain.ports.driver.IPersonService;
-import dev.matheuspereira.fluxcred.core.domain.validator.IdentifierValidator;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +26,10 @@ public class PersonService implements IPersonService {
           throw new BusinessException("The identifier already exists", 422);
         });
 
-    person.setIdentifierType(IdentifierType.fromLength(person.getIdentifier().length()));
-    if (!IdentifierValidator.validate(person.getIdentifier(), person.getIdentifierType())) {
+    IdentifierType identifierType = IdentifierType.fromLength(person.getIdentifier().length());
+    person.setIdentifierType(identifierType);
+
+    if (!identifierType.isValid(person.getIdentifier())) {
       throw new BusinessException("The identifier is invalid for type: " + person.getIdentifierType(), 412);
     }
 
